@@ -400,6 +400,7 @@ class Button:
             if self.rect.collidepoint(event.pos):
                 self.is_pressed = True
                 print(1, 2, 3)
+
                 self.func()
         elif event.type == pg.MOUSEBUTTONUP and event.button == 1:
             self.is_pressed = False
@@ -448,7 +449,7 @@ class Game:
 
         self.eat_button = Button("Еда", button_x, PADDING + ICON_SIZE, func=self.food_menu_on)
         self.clothes_button = Button("Одежда", button_x, PADDING * 2 + ICON_SIZE + BUTTON_HEIGHT,
-        func = self.clothes_menu_on)
+                                     func=self.clothes_menu_on)
         self.play_button = Button("Игры", button_x, PADDING * 3 + ICON_SIZE + BUTTON_HEIGHT * 2, func=self.game_on)
 
         self.upgrade_button = Button("Улучшить", SCREEN_WIDTH - ICON_SIZE, 0,
@@ -481,6 +482,7 @@ class Game:
 
     def game_on(self):
         self.mode = 'Mini game'
+        self.mini_game.new_game()
 
     def increase_money(self):
         for cost, check in self.costs_of_upgrade.items():
@@ -546,11 +548,11 @@ class Game:
                         "coins_per_second": self.coins_per_second,
                         "costs_of_upgrade": {
                             "100": self.costs_of_upgrade[100],
-                            "1000":self.costs_of_upgrade[1000],
-                            "5000":self.costs_of_upgrade[5000],
-                            "10000":self.costs_of_upgrade[10000]
-                    },
-                      "clothes": []
+                            "1000": self.costs_of_upgrade[1000],
+                            "5000": self.costs_of_upgrade[5000],
+                            "10000": self.costs_of_upgrade[10000]
+                        },
+                        "clothes": []
                     }
 
                     for item in self.clothes_menu.items:
@@ -560,8 +562,8 @@ class Game:
                                                 "is_using": item.is_using,
                                                 "is_bought": item.is_bought})
 
-                    with open("save.json", "w", encoding="utf8") as f:
-                        json.dump(data,f,ensure_ascii=False)
+                    with open("save.json", "w", encoding="utf-8") as f:
+                        json.dump(data, f, ensure_ascii=False)
 
                     pg.quit()
                     exit()
@@ -581,7 +583,7 @@ class Game:
                 else:
                     self.health -= 1
 
-                if self.satiety or self.health or self.happiness == 0:
+                if self.satiety == 0 or self.health == 0 or self.happiness == 0:
                     self.mode = "Game over"
 
             if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
